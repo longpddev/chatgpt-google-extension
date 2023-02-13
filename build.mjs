@@ -6,6 +6,7 @@ import postcssPlugin from 'esbuild-style-plugin'
 import fs from 'fs-extra'
 import process from 'node:process'
 import tailwindcss from 'tailwindcss'
+import { CSSMinifyPlugin } from './CSSMinifyPlugin.mjs'
 
 dotenv.config()
 
@@ -19,6 +20,7 @@ async function runEsbuild() {
   await esbuild.build({
     entryPoints: [
       'src/content-script/index.tsx',
+      'src/popup-search/index.tsx',
       'src/background/index.ts',
       'src/options/index.tsx',
       'src/popup/index.tsx',
@@ -39,6 +41,7 @@ async function runEsbuild() {
       '.png': 'dataurl',
     },
     plugins: [
+      CSSMinifyPlugin([tailwindcss, autoprefixer]),
       postcssPlugin({
         postcss: {
           plugins: [tailwindcss, autoprefixer],
@@ -73,6 +76,8 @@ async function build() {
 
   const commonFiles = [
     { src: 'build/content-script/index.js', dst: 'content-script.js' },
+    { src: 'build/popup-search/index.js', dst: 'popup-search.js' },
+    { src: 'build/popup-search/index.css', dst: 'popup-search.css' },
     { src: 'build/content-script/index.css', dst: 'content-script.css' },
     { src: 'build/background/index.js', dst: 'background.js' },
     { src: 'build/options/index.js', dst: 'options.js' },
