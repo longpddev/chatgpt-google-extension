@@ -242,6 +242,17 @@
       "css": [
         "content-script.css"
       ]
+    },
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "popup-search.js"
+      ],
+      "css": [
+        "popup-search.css"
+      ]
     }
   ]
 }

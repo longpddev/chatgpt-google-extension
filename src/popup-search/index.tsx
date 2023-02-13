@@ -4,16 +4,19 @@ import SearchPopup from './SearchPopup'
 import './style.scss'
 import style from './style.string.css'
 
-const sheet = new CSSStyleSheet()
-sheet.replaceSync(style)
-
+// const sheet = new CSSStyleSheet()
+// sheet.replaceSync(style)
+function injectStyle() {
+  const styleDom = document.createElement('style')
+  styleDom.innerHTML = style
+  return styleDom
+}
 async function run() {
   const app = document.createElement('chatgpt-popup-search')
-  const shadowRoot = app.attachShadow({ mode: 'open' })
+  const shadowRoot = app.attachShadow({ mode: 'closed' })
   const fragment = document.createDocumentFragment()
-  // shadowRoot.appendChild(injectStyle(Browser.runtime.getURL('/popup-search.css')))
+  shadowRoot.appendChild(injectStyle())
   const container = document.createElement('div')
-  shadowRoot.adoptedStyleSheets = [sheet]
   render(<SearchPopup />, container)
   shadowRoot.appendChild(fragment)
   shadowRoot.appendChild(container)

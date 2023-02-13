@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.test {
-  background: white;
+body {
+  font-size: 14px;
+  @apply text-gray-50;
 }
