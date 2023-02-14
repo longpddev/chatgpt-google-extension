@@ -1,6 +1,6 @@
 // import './style.scss'
 import { render } from 'preact'
-import SearchPopup from './SearchPopup'
+import Main from './Main'
 import './style.scss'
 import style from './style.string.css'
 
@@ -17,7 +17,7 @@ async function run() {
   const fragment = document.createDocumentFragment()
   shadowRoot.appendChild(injectStyle())
   const container = document.createElement('div')
-  render(<SearchPopup />, container)
+  render(<Main />, container)
   shadowRoot.appendChild(fragment)
   shadowRoot.appendChild(container)
   document.body.appendChild(app)

@@ -1,3 +1,4 @@
+import remToPx from '@thedutchcoder/postcss-rem-to-px'
 import archiver from 'archiver'
 import autoprefixer from 'autoprefixer'
 import * as dotenv from 'dotenv'
@@ -7,10 +8,11 @@ import fs from 'fs-extra'
 import process from 'node:process'
 import tailwindcss from 'tailwindcss'
 import { CSSMinifyPlugin } from './CSSMinifyPlugin.mjs'
-
 dotenv.config()
 
 const outdir = 'build'
+
+const plugins = [tailwindcss, autoprefixer, remToPx]
 
 async function deleteOldDir() {
   await fs.remove(outdir)
@@ -41,10 +43,10 @@ async function runEsbuild() {
       '.png': 'dataurl',
     },
     plugins: [
-      CSSMinifyPlugin([tailwindcss, autoprefixer]),
+      CSSMinifyPlugin(plugins),
       postcssPlugin({
         postcss: {
-          plugins: [tailwindcss, autoprefixer],
+          plugins: plugins,
         },
       }),
     ],
