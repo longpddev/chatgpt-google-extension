@@ -30,6 +30,7 @@
     "rehype-katex": "^6.0.2",
     "simplebar-react": "^3.2.1",
     "swr": "^2.0.0",
+    "tiny-emitter": "^2.1.0",
     "uuid": "^9.0.0",
     "zustand": "^4.3.3"
   },

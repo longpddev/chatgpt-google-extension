@@ -33,18 +33,20 @@ const SearchPopup = () => {
 
   return (
     <div ref={ref} className={clsx('search-popup no-visible')}>
-      <div className="flex flex-col search-popup__content">
-        <div className="flex justify-between pl-4 py-2 items-center bg-gray-800 border-0 border-b border-solid border-gray-700">
-          <span>ChatGPT</span>
-          <button
-            onClick={() => toggle(false)}
-            className="text-inherit btn-icon flex p-1 mr-2 hover:text-orange-500 cursor-pointer"
-          >
-            <GrClose className="" />
-          </button>
+      {show && (
+        <div className="flex flex-col search-popup__content">
+          <div className="flex justify-between pl-4 py-2 items-center bg-gray-800 border-0 border-b border-solid border-gray-700">
+            <span>ChatGPT</span>
+            <button
+              onClick={() => toggle(false)}
+              className="text-inherit btn-icon flex p-1 mr-2 hover:text-orange-500 cursor-pointer"
+            >
+              <GrClose className="" />
+            </button>
+          </div>
+          <SearchPopupBody />
         </div>
-        <SearchPopupBody />
-      </div>
+      )}
     </div>
   )
 }

@@ -86,6 +86,7 @@ const CopyCode: React.FC<CopyCodeProps> = ({ className, children, ...props }) =>
 const SearchPopupBody = () => {
   const { text, setText } = useSearch()
   const port = useMemo(() => Browser.runtime.connect(), [])
+  const ref = useRef<HTMLTextAreaElement>(null)
   const send = () => {
     if (text.trim().length === 0) return
     chatGpt.setSending()
@@ -108,16 +109,26 @@ const SearchPopupBody = () => {
       port.disconnect()
     }
   }, [])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const timer = setTimeout(() => el.focus(), 150)
+    return () => clearTimeout(timer)
+  }, [])
   return (
     <>
       <textarea
-        name=""
+        ref={ref}
         onChange={(e) => {
           if (chatGpt.answering || chatGpt.sending) {
             setText(text)
             return
           }
           setText(e.target.value)
+          e.nativeEvent.stopPropagation()
+          e.nativeEvent.stopImmediatePropagation()
+          e.nativeEvent.preventDefault()
         }}
         className={clsx(
           'w-full h-[70px] bg-gray-900 block border-0 border-b border-gray-700 border-solid',
@@ -126,11 +137,22 @@ const SearchPopupBody = () => {
           },
         )}
         placeholder="Search watch you want"
+        onKeyUp={(e) => {
+          e.nativeEvent.stopPropagation()
+          e.nativeEvent.stopImmediatePropagation()
+          e.nativeEvent.preventDefault()
+        }}
         onKeyDown={(e) => {
           if (chatGpt.answering || chatGpt.sending) return
-          if (e.key === 'Enter') {
+          if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
             send()
             ;(e.target as HTMLTextAreaElement).blur()
+          }
+
+          if (e.key !== 'Escape') {
+            e.nativeEvent.stopPropagation()
+            e.nativeEvent.stopImmediatePropagation()
+            e.nativeEvent.preventDefault()
           }
         }}
       >
@@ -164,7 +186,7 @@ const SearchPopupBody = () => {
               </>
             )}
 
-            {chatGpt.answer?.text.length ? (
+            <div className="min-h-[100px]">
               <ReactMarkdown
                 rehypePlugins={[
                   [
@@ -193,9 +215,7 @@ const SearchPopupBody = () => {
             } */}
                 {chatGpt.answer?.text || ''}
               </ReactMarkdown>
-            ) : (
-              <div className="min-h-[100px]"></div>
-            )}
+            </div>
           </SimpleBar>
         </div>
       ) : null}

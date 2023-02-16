@@ -43,10 +43,19 @@ export const useSearch = create<{
   setText: (data) => set(() => ({ text: data })),
 }))
 
+export const useRootDom = create<{
+  el: HTMLElement | undefined
+  setEl: (el: HTMLElement | undefined) => void
+}>((set) => ({
+  el: undefined,
+  setEl: (data) => set(() => ({ el: data })),
+}))
+
 function openPopup() {
   const range = window.getSelection()
   const textSelected = range?.toString().trim() || ''
   if (textSelected && !usePopupState.getState().show) {
+    console.log(textSelected)
     useSearch.setState(() => ({
       text: textSelected,
     }))
